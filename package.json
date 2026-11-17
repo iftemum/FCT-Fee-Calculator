@@ -1,0 +1,19 @@
+{
+  "name": "refinance-fee-calculator",
+  "version": "1.0.0",
+  "description": "Fee calculator for a broker refinance program fee schedule (November 2026).",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/serve.js",
+    "test": "node --test \"test/unit/**/*.test.js\"",
+    "test:e2e": "node --test \"test/e2e/**/*.test.js\"",
+    "test:all": "npm test && npm run test:e2e"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
