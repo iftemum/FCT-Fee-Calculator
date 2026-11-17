@@ -52,7 +52,8 @@ test/e2e/       Playwright specs for the real page
 Requires Node 20 or later. There are no runtime dependencies.
 
 ```bash
-cd refinance-fee-calculator
+git clone https://github.com/iftemum/FCT-Fee-Calculator.git
+cd FCT-Fee-Calculator
 npm start            # http://localhost:4173
 npm test             # unit tests
 npm install && npx playwright install chromium
