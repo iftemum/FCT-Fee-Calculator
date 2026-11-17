@@ -100,9 +100,9 @@ describe('fee calculator page', () => {
   });
 
   test('copy button copies a plain-text breakdown', async () => {
-    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin: url });
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin: new URL(url).origin });
     await page.getByRole('button', { name: 'Copy breakdown' }).click();
-    assert.match(await page.getByRole('status').textContent(), /Copied/);
+    await page.getByRole('status').filter({ hasText: 'Copied' }).waitFor(); // copying is async
     const text = await page.evaluate(() => navigator.clipboard.readText());
     assert.match(text, /Alberta/);
     assert.match(text, /Total: \$1,129\.00/);
