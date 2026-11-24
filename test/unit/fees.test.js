@@ -101,6 +101,15 @@ describe('additional title insurance premium (credit over $750,000)', () => {
   test('over $5M: a partial $1,000 counts as a full one ($5,000,500 -> $750.65)', () =>
     assert.equal(insurancePremium('ON', 5_000_500).premium, 750.65));
 
+  describe('Alberta: FCT does not add the over-$750,000 premium (confirmed on real files)', () => {
+    test('$920,000 -> premium $0', () => assert.equal(insurancePremium('AB', 920_000).premium, 0));
+    test('$2,500,000 -> premium $0', () => assert.equal(insurancePremium('AB', 2_500_000).premium, 0));
+    test('FCT file: plan limit $920,000 -> FCT fee $1,599', () =>
+      assert.equal(calculateFees({ province: 'AB', amount: 920_000 }).total, 1599));
+    test('FCT file: plan limit $815,000 -> FCT fee $1,494', () =>
+      assert.equal(calculateFees({ province: 'AB', amount: 815_000 }).total, 1494));
+  });
+
   describe('British Columbia only pays the premium above $1,000,000', () => {
     test('$900,000 -> $0', () => assert.equal(insurancePremium('BC', 900_000).premium, 0));
     test('$1,000,000 -> $0', () => assert.equal(insurancePremium('BC', 1_000_000).premium, 0));
