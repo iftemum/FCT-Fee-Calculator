@@ -60,5 +60,10 @@ for amount, fee in REAL.items():
     if got != fee:
         fails += 1; print(f'FAIL real FCT file AB ${amount:,}: expected {fee}, got {got}')
 
+# Fee Schedule must be locked against accidental edits.
+checks += 1
+if not load_workbook(BOOK)['Fee Schedule'].protection.sheet:
+    fails += 1; print('FAIL Fee Schedule tab is not protected')
+
 print(f'{checks - fails}/{checks} checks passed')
 sys.exit(1 if fails else 0)

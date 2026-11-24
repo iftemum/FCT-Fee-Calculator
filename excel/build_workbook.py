@@ -52,7 +52,7 @@ S = "'Fee Schedule'!"
 sch['A1'] = 'Fee Schedule'
 sch['A1'].font = f(size=14, bold=True)
 sch['A2'] = ('Source: TD Broker Refinance Program Fee Schedule, title insured credit applications, '
-             'fees current as of November 2, 2026. Blue cells are editable if the schedule changes.')
+             'fees current as of November 2, 2026. This tab is locked. To update fees: Review > Unprotect Sheet, edit the blue cells, then Protect Sheet again.')
 sch['A2'].font = f(color=MUTED, italic=True)
 
 hdr = ['Code', 'Province', 'Program fee', 'Registration rule', 'Tax on premium', 'Adds premium over $750K']
@@ -61,7 +61,7 @@ for c, h in enumerate(hdr, 1):
     cell.font = f(bold=True); cell.fill = HEAD_FILL; cell.border = BOX
 PROV_FIRST = 4
 for i, (code, name, fee, rule, tax) in enumerate(PROVINCES):
-    adds = 'No' if code == 'AB' else 'Yes'
+    adds = 'No' if code in ('AB', 'NB', 'NS', 'PE') else 'Yes'  # not named in the premium section
     r = PROV_FIRST + i
     for c, v in enumerate([code, name, fee, rule, tax, adds], 1):
         cell = sch.cell(r, c, v); cell.border = BOX; cell.font = f()
@@ -81,8 +81,9 @@ yes_no_dv = DataValidation(type='list', formula1='"Yes,No"', allow_blank=False)
 sch.add_data_validation(yes_no_dv)
 yes_no_dv.add(f'F{PROV_FIRST}:F{PROV_LAST}')
 sch.cell(PROV_FIRST + 1, 6).comment = Comment(
-    'FCT does not add the over-$750,000 premium to its fee in Alberta. Confirmed on real files: '
-    'plan limit $920,000 -> FCT fee $1,599; $815,000 -> $1,494.', 'Calculator')
+    'Only provinces named in the schedule\'s insurance premium section pay it (ON, NF, SK, MB, QC, '
+    'and BC above $1M). Alberta confirmed on real FCT files: plan limit $920,000 -> $1,599; '
+    '$815,000 -> $1,494.', 'Calculator')
 
 # Rule constants
 sch['A16'] = 'Rule constants'; sch['A16'].font = f(size=12, bold=True)
@@ -309,6 +310,9 @@ calc.row_dimensions[42].height = 22
 for ref in ('C5', 'C6', 'C7'):
     calc[ref].protection = Protection(locked=False)
 calc.protection.sheet = True
+# Lock the whole Fee Schedule tab against accidental edits. No password, so the
+# owner can change fees with Review > Unprotect Sheet (or add a password there).
+sch.protection.sheet = True
 calc.protection.formatCells = False
 calc.protection.formatColumns = False
 

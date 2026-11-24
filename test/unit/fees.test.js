@@ -110,6 +110,17 @@ describe('additional title insurance premium (credit over $750,000)', () => {
       assert.equal(calculateFees({ province: 'AB', amount: 815_000 }).total, 1494));
   });
 
+  describe('Only provinces named in the premium section pay it (ON, NL, SK, MB, QC, and BC above $1M)', () => {
+    for (const code of ['AB', 'NB', 'NS', 'PE']) {
+      test(`${code} $1,200,000 -> premium $0`, () =>
+        assert.equal(insurancePremium(code, 1_200_000).premium, 0));
+    }
+    for (const code of ['ON', 'NL', 'SK', 'MB', 'QC']) {
+      test(`${code} $1,200,000 -> premium $250`, () =>
+        assert.equal(insurancePremium(code, 1_200_000).premium, 250));
+    }
+  });
+
   describe('British Columbia only pays the premium above $1,000,000', () => {
     test('$900,000 -> $0', () => assert.equal(insurancePremium('BC', 900_000).premium, 0));
     test('$1,000,000 -> $0', () => assert.equal(insurancePremium('BC', 1_000_000).premium, 0));
@@ -154,7 +165,7 @@ describe('calculateFees totals', () => {
     ['NL', 2_500_000, 11_854.5],      // 992 + 10,000 reg + 750 + 112.50
     ['BC', 1_200_000, 1000.85],       // 750.85 + 250
     ['BC', 950_000, 750.85],          // BC exempt below $1M
-    ['PE', 750_000.01, 1185.0],       // 1085 + 100
+    ['PE', 750_000.01, 1085.0],       // PE is not named in the premium section
     ['MB', 1_600_000, 1275.0],        // 925 + 350 + 0 tax
   ];
   for (const [province, amount, total] of cases) {

@@ -37,18 +37,19 @@ const QC_DISCHARGE_INCLUDES = [
 
 // programFee in cents; premiumTaxBp = tax on premium in basis points
 // (ON 8%, NL 15%, SK 6%, QC 9%, MB 0%; not listed = 0%).
-// noPremium: FCT does not add the over-$750,000 premium to its fee in this
-// province (Alberta, confirmed on real files: $920,000 -> $1,599, $815,000 -> $1,494).
+// noPremium: the province is not named in the schedule's insurance premium
+// section, so no over-$750,000 premium applies (AB, NB, NS, PE). Alberta is
+// confirmed on real FCT files: $920,000 -> $1,599, $815,000 -> $1,494.
 export const PROVINCES = {
   BC: { name: 'British Columbia', programFee: 75085, registration: 'none', premiumTaxBp: 0 },
   AB: { name: 'Alberta', programFee: 67900, registration: 'perFiveThousand', premiumTaxBp: 0, noPremium: true },
   SK: { name: 'Saskatchewan', programFee: 70000, registration: 'saskChart', premiumTaxBp: 600 },
   MB: { name: 'Manitoba', programFee: 92500, registration: 'none', premiumTaxBp: 0 },
   ON: { name: 'Ontario', programFee: 89811, registration: 'none', premiumTaxBp: 800 },
-  NB: { name: 'New Brunswick', programFee: 84900, registration: 'none', premiumTaxBp: 0 },
-  NS: { name: 'Nova Scotia', programFee: 84900, registration: 'none', premiumTaxBp: 0 },
+  NB: { name: 'New Brunswick', programFee: 84900, registration: 'none', premiumTaxBp: 0, noPremium: true },
+  NS: { name: 'Nova Scotia', programFee: 84900, registration: 'none', premiumTaxBp: 0, noPremium: true },
   NL: { name: 'Newfoundland and Labrador', programFee: 99200, registration: 'perHundred', premiumTaxBp: 1500 },
-  PE: { name: 'Prince Edward Island', programFee: 108500, registration: 'none', premiumTaxBp: 0 },
+  PE: { name: 'Prince Edward Island', programFee: 108500, registration: 'none', premiumTaxBp: 0, noPremium: true },
   QC: { name: 'Quebec', programFee: 157250, registration: 'none', premiumTaxBp: 900 },
 };
 
